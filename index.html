@@ -13,6 +13,7 @@
             --cake-sponge-dark: #e8a5b8;
             --cake-sponge-light: #f3bccc;
             --text-primary: #9c4d62;   
+            --text-secondary: #bd7387;
             --flame-warm: #ffd166;     
             --flame-glow: #ffb5a7;     
         }
@@ -26,19 +27,48 @@
             margin: 0;
             font-family: 'Courier New', Courier, monospace;
             overflow: hidden;
+            position: relative;
         }
 
-        /* Card Setup */
+        /* Ambient Floating Heart Elements */
+        .ambient-heart {
+            position: absolute;
+            color: var(--text-secondary);
+            pointer-events: none; /* Prevents hearts from blocking clicks on the card */
+            z-index: 1;
+            animation: floatUp linear forwards;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(105vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: var(--target-opacity, 0.4);
+            }
+            90% {
+                opacity: var(--target-opacity, 0.4);
+            }
+            100% {
+                transform: translateY(-10vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Card Container (Placed higher than ambient hearts) */
         .card {
             background-color: var(--card-bg);
             width: 340px;
-            height: 440px; /* Adjusted height slightly for better spacing */
+            height: 460px; 
             border-radius: 24px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             box-shadow: 0 15px 35px rgba(189, 115, 135, 0.2);
+            position: relative;
+            z-index: 5;
         }
 
         /* Cake Composition Tower */
@@ -109,12 +139,12 @@
             background-size: 20px 20px;
         }
 
-        /* Candle Mount Element */
+        /* Fixed Candle Position */
         .candle {
             background: #ffffff;
             border-radius: 4px;
             position: absolute;
-            top: -34px;
+            top: 14px; 
             left: 50%;
             transform: translateX(-50%);
             width: 6px;
@@ -154,12 +184,22 @@
         /* Greeting Text Layout */
         .text-greet {
             color: var(--text-primary);
-            font-size: 22px;
+            font-size: 20px;
             letter-spacing: -0.5px;
-            margin: 35px 0 0 0;
+            margin: 35px 0 10px 0;
             font-weight: normal;
             opacity: 0;
             animation: revealText 0.8s ease-out 1.8s forwards;
+            text-align: center;
+        }
+
+        /* Heart Icon Styling */
+        .heart-icon {
+            color: var(--text-secondary);
+            font-size: 24px;
+            opacity: 0;
+            margin-top: 5px;
+            animation: revealText 0.8s ease-out 2.1s forwards, heartbeat 1.2s infinite ease-in-out 2.9s alternate;
         }
 
         /* ANIMATION TIMELINES */
@@ -168,11 +208,10 @@
             100% { opacity: 1; transform: translate(var(--tw-x, 0), 0); }
         }
 
-        /* Overriding translation path specifically for centered elements */
         .candle { --tw-x: -50%; }
 
         @keyframes revealText {
-            0% { opacity: 0; transform: translateY(10px); }
+            0% { opacity: 0; transform: translateY(15px); }
             100% { opacity: 1; transform: translateY(0); }
         }
 
@@ -180,26 +219,31 @@
             0% { transform: translateX(-50%) rotate(-43deg) scale(0.95); }
             100% { transform: translateX(-50%) rotate(-47deg) scale(1.05); }
         }
+
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.15); }
+        }
     </style>
 </head>
 <body>
 
     <div class="card">
         <div class="cake-tower">
-            <!-- Candle element drops on top -->
             <div class="candle" id="birthdayCandle">
                 <div class="fuego" id="candleFlame"></div>
             </div>
-            <!-- Individual stacked cake blocks -->
             <div class="layer layer-frosting"></div>
             <div class="layer layer-top"></div>
             <div class="layer layer-middle"></div>
             <div class="layer layer-bottom"></div>
         </div>
-        <h1 class="text-greet">happy birthday!</h1>
+        <h1 class="text-greet">happy birthday, baby!</h1>
+        <div class="heart-icon">♥</div>
     </div>
 
     <script>
+        // --- 1. Interaction to Blow out Candle ---
         const candle = document.getElementById('birthdayCandle');
         const flame = document.getElementById('candleFlame');
 
@@ -209,6 +253,39 @@
                 alert("Make a wish! 🌸✨");
             }
         });
+
+        // --- 2. Background Ambient Floating Hearts Generator ---
+        function createAmbientHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('ambient-heart');
+            heart.innerHTML = '♥';
+            
+            // Randomize visual traits
+            const size = Math.floor(Math.random() * 15) + 10; // 10px to 25px
+            const leftPos = Math.random() * 100; // 0% to 100% screen width
+            const duration = Math.random() * 6 + 6; // 6s to 12s travel speed
+            const opacity = Math.random() * 0.3 + 0.15; // 0.15 to 0.45 subtle opacity
+
+            heart.style.fontSize = `${size}px`;
+            heart.style.left = `${leftPos}vw`;
+            heart.style.animationDuration = `${duration}s`;
+            heart.style.setProperty('--target-opacity', opacity);
+
+            document.body.appendChild(heart);
+
+            // Clean up heart element once it moves off screen
+            setTimeout(() => {
+                heart.remove();
+            }, duration * 1000);
+        }
+
+        // Generate a new background heart every 700 milliseconds
+        setInterval(createAmbientHeart, 700);
+        
+        // Seed a few initial hearts instantly so background doesn't start empty
+        for(let i = 0; i < 5; i++) {
+            setTimeout(createAmbientHeart, Math.random() * 3000);
+        }
     </script>
 
 </body>
