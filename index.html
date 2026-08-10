@@ -172,19 +172,40 @@
             background: var(--cake-sponge-dark);
         }
 
-        /* Flame Component */
+        /* UPDATED REALISTIC FLAME STYLING */
         .fuego {
-            border-radius: 100% 0 100% 100%;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
             position: absolute;
-            top: -20px;
+            top: -24px;
             left: 50%;
-            transform: translateX(-50%) rotate(-45deg);
-            width: 10px;
-            height: 20px;
-            background: var(--flame-warm);
-            box-shadow: 0 0 12px var(--flame-warm), 0 0 25px var(--flame-glow);
-            animation: flicker 0.6s ease-in-out infinite alternate;
+            width: 12px;
+            height: 24px;
+            background: linear-gradient(to bottom, #ffffff 0%, var(--flame-warm) 40%, var(--flame-glow) 100%);
+            box-shadow: 0 0 15px var(--flame-warm), 0 -4px 10px #ff7b00;
             transform-origin: center bottom;
+            animation: flameMotion 1.5s ease-in-out infinite alternate;
+        }
+
+        /* NEW FLAME MOTION KEYFRAMES - Adds sway, morphing, and flickers */
+        @keyframes flameMotion {
+            0% {
+                transform: translateX(-50%) scaleX(1) scaleY(1) rotate(-2deg);
+                border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            }
+            25% {
+                transform: translateX(-52%) scaleX(0.9) scaleY(1.05) rotate(1deg);
+            }
+            50% {
+                transform: translateX(-48%) scaleX(1.05) scaleY(0.95) rotate(-1deg);
+                border-radius: 45% 55% 50% 50% / 65% 60% 40% 45%;
+            }
+            75% {
+                transform: translateX(-51%) scaleX(0.95) scaleY(1.02) rotate(2deg);
+            }
+            100% {
+                transform: translateX(-50%) scaleX(1.02) scaleY(0.98) rotate(-1deg);
+                border-radius: 55% 45% 50% 50% / 60% 65% 45% 40%;
+            }
         }
 
         /* Greeting Text Layout */
@@ -224,11 +245,6 @@
             100% { opacity: 1; transform: translateY(0); }
         }
 
-        @keyframes flicker {
-            0% { transform: translateX(-50%) rotate(-43deg) scale(0.95); }
-            100% { transform: translateX(-50%) rotate(-47deg) scale(1.05); }
-        }
-
         @keyframes heartbeat {
             0% { transform: scale(1); }
             100% { transform: scale(1.15); }
@@ -249,7 +265,7 @@
             <div class="layer layer-middle"></div>
             <div class="layer layer-bottom"></div>
         </div>
-        <h1 class="text-greet">happy birthday, baby!</h1>
+        <h1 class="text-greet">Happy birthday, my baby!</h1>
         <div class="heart-icon">♥</div>
     </div>
 
@@ -261,7 +277,7 @@
         candle.addEventListener('click', function() {
             if (flame) {
                 flame.style.display = 'none'; 
-                alert("Make a wish! 🌸✨");
+                alert("Before blowing your candle, make a wish. 🌸\nI'll see you later. I love you.");
             }
         });
 
@@ -271,11 +287,10 @@
             heart.classList.add('ambient-heart');
             heart.innerHTML = '♥';
             
-            // Randomize visual traits
-            const size = Math.floor(Math.random() * 20) + 8;     // Wider size variance (8px to 28px)
-            const leftPos = Math.random() * 100;                 // Anywhere across screen width
-            const duration = Math.random() * 5 + 4;              // Faster travel speed range (4s to 9s)
-            const opacity = Math.random() * 0.35 + 0.15;         // Subtle alpha range
+            const size = Math.floor(Math.random() * 20) + 8;     
+            const leftPos = Math.random() * 100;                 
+            const duration = Math.random() * 5 + 4;              
+            const opacity = Math.random() * 0.35 + 0.15;         
 
             heart.style.fontSize = `${size}px`;
             heart.style.left = `${leftPos}vw`;
@@ -284,16 +299,13 @@
 
             document.body.appendChild(heart);
 
-            // Clean up heart element once it moves off screen
             setTimeout(() => {
                 heart.remove();
             }, duration * 1000);
         }
 
-        // FIXED: Spawns hearts much faster now (every 250ms instead of 700ms)
         setInterval(createAmbientHeart, 250);
         
-        // Populate the viewport instantly with a few bursts so it looks dense right away
         for(let i = 0; i < 15; i++) {
             setTimeout(createAmbientHeart, Math.random() * 2000);
         }
