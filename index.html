@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pastel Birthday Cake Card</title>
+    <style>
+        /* Color Palette & Base Styles */
+        :root {
+            --bg-color: #fcf0f2;       /* Ultra-soft pastel backdrop */
+            --card-bg: #fad2e1;        /* Perfect soft pastel pink card body */
+            --cake-frosting: #fff5f7;  /* Delicate creamy frosting shade */
+            --cake-sponge: #e8a5b8;    /* Soft pink-tinted sponge cake base */
+            --text-primary: #9c4d62;   /* Deep pastel pink for text contrast */
+            --text-secondary: #bd7387; /* Subdued accent pink text */
+            --flame-warm: #ffd166;     /* Pastel yellow core */
+            --flame-glow: #ffb5a7;     /* Warm pinkish-orange aura */
+        }
+
+        body {
+            background-color: var(--bg-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Courier New', Courier, monospace;
+            overflow: hidden;
+        }
+
+        /* Card Container */
+        .card {
+            background-color: var(--card-bg);
+            width: 340px;
+            height: 460px;
+            border-radius: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 15px 35px rgba(189, 115, 135, 0.2);
+        }
+
+        /* Cake Composition Area */
+        .cake-area {
+            position: relative;
+            height: 160px;
+            width: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: center;
+        }
+
+        /* Cake Base & Layers */
+        .cake {
+            width: 170px;
+            height: 85px;
+            background: repeating-linear-gradient(
+                var(--cake-sponge), 
+                var(--cake-sponge) 18px, 
+                var(--cake-frosting) 18px, 
+                var(--cake-frosting) 24px
+            );
+            border-radius: 12px;
+            position: relative;
+            box-shadow: 0 6px 15px rgba(156, 77, 98, 0.1);
+        }
+
+        /* Drip Frosting Top Layer */
+        .frosting {
+            position: absolute;
+            top: -4px;
+            left: 0;
+            width: 100%;
+            height: 22px;
+            background-color: var(--cake-frosting);
+            border-radius: 12px 12px 6px 6px;
+        }
+
+        /* Decorative Icing Drips */
+        .frosting::after {
+            content: '';
+            position: absolute;
+            top: 18px;
+            left: 15px;
+            width: 140px;
+            height: 10px;
+            background-image: radial-gradient(circle at 10px -2px, var(--cake-frosting) 12px, transparent 13px);
+            background-size: 20px 20px;
+        }
+
+        /* Interactive Candle element */
+        .candle {
+            background: #ffffff;
+            border-radius: 4px;
+            position: absolute;
+            top: -38px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 6px;
+            height: 38px;
+            cursor: pointer;
+            z-index: 10;
+            transition: opacity 0.5s ease;
+        }
+
+        /* Candle Stripes */
+        .candle::before {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 4px;
+            top: 8px;
+            background: var(--cake-sponge);
+        }
+
+        .candle::after {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 4px;
+            top: 20px;
+            background: var(--cake-sponge);
+        }
+
+        /* Glowing Candle Flame */
+        .fuego {
+            border-radius: 100% 0 100% 100%;
+            position: absolute;
+            top: -22px;
+            left: 50%;
+            transform: translateX(-50%) rotate(-45deg);
+            width: 10px;
+            height: 22px;
+            background: var(--flame-warm);
+            box-shadow: 0 0 12px var(--flame-warm), 0 0 25px var(--flame-glow);
+            animation: flicker 0.6s ease-in-out infinite alternate;
+            transform-origin: center bottom;
+        }
+
+        @keyframes flicker {
+            0% { transform: translateX(-50%) rotate(-43deg) scale(0.95); }
+            100% { transform: translateX(-50%) rotate(-47deg) scale(1.05); }
+        }
+
+        /* Typographic Styling */
+        .text-greet {
+            color: var(--text-primary);
+            font-size: 22px;
+            letter-spacing: -0.5px;
+            margin: 35px 0 6px 0;
+            font-weight: normal;
+        }
+
+        .text-name {
+            color: var(--text-secondary);
+            font-size: 16px;
+            letter-spacing: 0.5px;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <div class="cake-area">
+            <div class="cake">
+                <div class="frosting"></div>
+                <div class="candle" id="birthdayCandle">
+                    <div class="fuego" id="candleFlame"></div>
+                </div>
+            </div>
+        </div>
+        <h1 class="text-greet">happy birthday!</h1>
+        <p class="text-name">Lovie</p>
+    </div>
+
+    <script>
+        // Interactive Logic to Blow out Candle
+        const candle = document.getElementById('birthdayCandle');
+        const flame = document.getElementById('candleFlame');
+
+        candle.addEventListener('click', function() {
+            if (flame) {
+                flame.style.display = 'none'; // Instantly removes the fire element
+                alert("Make a wish! 🌸✨");
+            }
+        });
+    </script>
+
+</body>
+</html>
