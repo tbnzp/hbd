@@ -34,14 +34,16 @@
         .ambient-heart {
             position: absolute;
             color: var(--text-secondary);
-            pointer-events: none; /* Prevents hearts from blocking clicks on the card */
+            pointer-events: none; 
             z-index: 1;
+            bottom: -50px; /* Start securely below the screen edge */
             animation: floatUp linear forwards;
         }
 
+        /* FIXED: Changed translateY to ensure hearts travel past the top of the viewport */
         @keyframes floatUp {
             0% {
-                transform: translateY(105vh) rotate(0deg);
+                transform: translateY(0) rotate(0deg);
                 opacity: 0;
             }
             10% {
@@ -51,12 +53,12 @@
                 opacity: var(--target-opacity, 0.4);
             }
             100% {
-                transform: translateY(-10vh) rotate(360deg);
+                transform: translateY(-115vh) rotate(360deg); /* Pushes them completely off the top */
                 opacity: 0;
             }
         }
 
-        /* Card Container (Placed higher than ambient hearts) */
+        /* Card Container */
         .card {
             background-color: var(--card-bg);
             width: 340px;
@@ -139,22 +141,27 @@
             background-size: 20px 20px;
         }
 
-        /* Fixed Candle Position */
+        /* FIXED CANDLE WRAPPER: Centers candle drop location perfectly relative to top layer */
+        .candle-holder {
+            position: absolute;
+            bottom: 64px; /* Sits directly on the uppermost frosting layer */
+            left: 50%;
+            width: 6px;
+            height: 34px;
+            z-index: 10;
+            opacity: 0;
+            transform: translate(-50%, -200px);
+            animation: dropStackCandle 0.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+            animation-delay: 1.4s;
+        }
+
         .candle {
             background: #ffffff;
             border-radius: 4px;
-            position: absolute;
-            top: 14px; 
-            left: 50%;
-            transform: translateX(-50%);
-            width: 6px;
-            height: 34px;
+            width: 100%;
+            height: 100%;
             cursor: pointer;
-            z-index: 10;
-            opacity: 0;
-            transform: translate(-50%, -150px);
-            animation: dropStack 0.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-            animation-delay: 1.4s;
+            position: relative;
         }
 
         .candle::before {
@@ -204,11 +211,14 @@
 
         /* ANIMATION TIMELINES */
         @keyframes dropStack {
-            0% { opacity: 0; transform: translate(var(--tw-x, -50%), -200px); }
-            100% { opacity: 1; transform: translate(var(--tw-x, 0), 0); }
+            0% { opacity: 0; transform: translateY(-200px); }
+            100% { opacity: 1; transform: translateY(0); }
         }
 
-        .candle { --tw-x: -50%; }
+        @keyframes dropStackCandle {
+            0% { opacity: 0; transform: translate(-50%, -200px); }
+            100% { opacity: 1; transform: translate(-50%, 0); }
+        }
 
         @keyframes revealText {
             0% { opacity: 0; transform: translateY(15px); }
@@ -230,9 +240,13 @@
 
     <div class="card">
         <div class="cake-tower">
-            <div class="candle" id="birthdayCandle">
-                <div class="fuego" id="candleFlame"></div>
+            <!-- Fixed Candle layout element -->
+            <div class="candle-holder" id="birthdayCandle">
+                <div class="candle">
+                    <div class="fuego" id="candleFlame"></div>
+                </div>
             </div>
+            <!-- Individual stacked cake blocks -->
             <div class="layer layer-frosting"></div>
             <div class="layer layer-top"></div>
             <div class="layer layer-middle"></div>
@@ -261,10 +275,10 @@
             heart.innerHTML = '♥';
             
             // Randomize visual traits
-            const size = Math.floor(Math.random() * 15) + 10; // 10px to 25px
-            const leftPos = Math.random() * 100; // 0% to 100% screen width
-            const duration = Math.random() * 6 + 6; // 6s to 12s travel speed
-            const opacity = Math.random() * 0.3 + 0.15; // 0.15 to 0.45 subtle opacity
+            const size = Math.floor(Math.random() * 15) + 10; 
+            const leftPos = Math.random() * 100; 
+            const duration = Math.random() * 6 + 6; 
+            const opacity = Math.random() * 0.3 + 0.15; 
 
             heart.style.fontSize = `${size}px`;
             heart.style.left = `${leftPos}vw`;
