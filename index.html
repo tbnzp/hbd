@@ -36,11 +36,10 @@
             color: var(--text-secondary);
             pointer-events: none; 
             z-index: 1;
-            bottom: -50px; /* Start securely below the screen edge */
+            bottom: -50px; 
             animation: floatUp linear forwards;
         }
 
-        /* FIXED: Changed translateY to ensure hearts travel past the top of the viewport */
         @keyframes floatUp {
             0% {
                 transform: translateY(0) rotate(0deg);
@@ -53,7 +52,7 @@
                 opacity: var(--target-opacity, 0.4);
             }
             100% {
-                transform: translateY(-115vh) rotate(360deg); /* Pushes them completely off the top */
+                transform: translateY(-115vh) rotate(360deg); 
                 opacity: 0;
             }
         }
@@ -141,10 +140,10 @@
             background-size: 20px 20px;
         }
 
-        /* FIXED CANDLE WRAPPER: Centers candle drop location perfectly relative to top layer */
+        /* Candle Wrapper Drop System */
         .candle-holder {
             position: absolute;
-            bottom: 64px; /* Sits directly on the uppermost frosting layer */
+            bottom: 64px; 
             left: 50%;
             width: 6px;
             height: 34px;
@@ -240,13 +239,11 @@
 
     <div class="card">
         <div class="cake-tower">
-            <!-- Fixed Candle layout element -->
             <div class="candle-holder" id="birthdayCandle">
                 <div class="candle">
                     <div class="fuego" id="candleFlame"></div>
                 </div>
             </div>
-            <!-- Individual stacked cake blocks -->
             <div class="layer layer-frosting"></div>
             <div class="layer layer-top"></div>
             <div class="layer layer-middle"></div>
@@ -275,10 +272,10 @@
             heart.innerHTML = '♥';
             
             // Randomize visual traits
-            const size = Math.floor(Math.random() * 15) + 10; 
-            const leftPos = Math.random() * 100; 
-            const duration = Math.random() * 6 + 6; 
-            const opacity = Math.random() * 0.3 + 0.15; 
+            const size = Math.floor(Math.random() * 20) + 8;     // Wider size variance (8px to 28px)
+            const leftPos = Math.random() * 100;                 // Anywhere across screen width
+            const duration = Math.random() * 5 + 4;              // Faster travel speed range (4s to 9s)
+            const opacity = Math.random() * 0.35 + 0.15;         // Subtle alpha range
 
             heart.style.fontSize = `${size}px`;
             heart.style.left = `${leftPos}vw`;
@@ -293,12 +290,12 @@
             }, duration * 1000);
         }
 
-        // Generate a new background heart every 700 milliseconds
-        setInterval(createAmbientHeart, 700);
+        // FIXED: Spawns hearts much faster now (every 250ms instead of 700ms)
+        setInterval(createAmbientHeart, 250);
         
-        // Seed a few initial hearts instantly so background doesn't start empty
-        for(let i = 0; i < 5; i++) {
-            setTimeout(createAmbientHeart, Math.random() * 3000);
+        // Populate the viewport instantly with a few bursts so it looks dense right away
+        for(let i = 0; i < 15; i++) {
+            setTimeout(createAmbientHeart, Math.random() * 2000);
         }
     </script>
 
